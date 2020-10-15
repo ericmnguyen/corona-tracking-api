@@ -1,0 +1,14 @@
+# serverless.yml
+service: my-first-serverless
+provider:
+  name: aws
+  runtime: nodejs12.13.1
+  stage: dev
+  region: ap-southeast-1
+
+functions:
+  app:
+    handler: index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
