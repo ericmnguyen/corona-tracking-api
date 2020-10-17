@@ -20,7 +20,8 @@ const defaultUri = 'https://api.covid19api.com/';
 const summaryUri = 'https://api.covid19api.com/summary';
 const countriesUri = 'https://api.covid19api.com/countries';
 
-const uri = process.env.ATLAS_URI;
+const uri =
+  'mongodb+srv://nhat:123@conaratracking.olwkl.mongodb.net/coviddb?retryWrites=true&w=majority';
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
