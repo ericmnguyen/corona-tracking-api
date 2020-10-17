@@ -21,7 +21,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use(cors());
 app.use(express.json());
 
 const defaultUri = 'https://api.covid19api.com/';
