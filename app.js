@@ -45,8 +45,8 @@ connection.once('open', () => {
 });
 
 app.use('/users', usersRouter);
-app.use('/exercises', exercisesRouter);
-app.use('/movies', moviesRouter);
+// app.use('/exercises', exercisesRouter);
+// app.use('/movies', moviesRouter);
 
 let data = {};
 axios

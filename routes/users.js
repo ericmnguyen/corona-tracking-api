@@ -1,15 +1,14 @@
-// Filename: api-routes.js
-// Initialize express router
-const axios = require('axios');
 let router = require('express').Router();
+const jwt = require('jsonwebtoken');
+const { verifyToken } = require('./token');
 let userModel = require('../models/user.model');
 
-router.route('/').get((req, res) => {
-  userModel
-    .find()
-    .then((users) => res.json(users))
-    .catch((err) => res.status(400).json('Error: ' + err));
-});
+// router.route('/').get((req, res) => {
+//   userModel
+//     .find()
+//     .then((users) => res.json(users))
+//     .catch((err) => res.status(400).json('Error: ' + err));
+// });
 
 router.route('/').post((req, res) => {
   const email = req.body.email;
@@ -17,7 +16,17 @@ router.route('/').post((req, res) => {
 
   userModel
     .findOne({ email, password })
-    .then((email) => res.json(email))
+    .then((user) => {
+      jwt.sign(
+        { user: req.body },
+        'secretkey',
+        { expiresIn: '30m' },
+        (err, token) => {
+          res.json({ user, token });
+        }
+      );
+      // return res.json(email);
+    })
     .catch((err) => res.status(400).json('Error: ' + err));
 });
 
@@ -26,30 +35,21 @@ router.route('/add').post((req, res) => {
   const password = req.body.password;
 
   const newUser = new userModel({ email, password });
-
-  newUser
-    .save()
-    .then(() => res.json('User added!'))
-    .catch((err) => res.status(400).json('Error: ' + err));
+  userModel.findOne({ email }).then((email) => {
+    if (email) {
+      res.status(200).json('Email existed!');
+    } else {
+      newUser
+        .save()
+        .then(() => res.status(201).json('Created successfully'))
+        .catch((err) => res.status(400).json('Error: ' + err));
+    }
+  });
 });
 
-// router.route('/add').post((req, res) => {
-//   console.log('body', req);
-//   const username = req.body.username;
-
-//   const newUser = new User({ username });
-
-//   newUser.save()
-//     .then(() => res.json('User added!'))
-//     .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.route('/delete').delete((req, res) => {
-  console.log('delete', req);
   // const username = req.body.username;
-
   // const newUser = new User({ username });
-
   // newUser.save()
   //   .then(() => res.json('User added!'))
   //   .catch(err => res.status(400).json('Error: ' + err));
