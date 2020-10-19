@@ -1,12 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const axios = require('axios');
 const serverless = require('serverless-http');
 
-const exercisesRouter = require('./routes/exercises');
 const usersRouter = require('./routes/users');
-const moviesRouter = require('./routes/movies');
+const countriesRouter = require('./routes/countries');
 
 require('dotenv').config();
 
@@ -45,19 +43,18 @@ connection.once('open', () => {
 });
 
 app.use('/users', usersRouter);
-// app.use('/exercises', exercisesRouter);
-// app.use('/movies', moviesRouter);
+app.use('/summary', countriesRouter);
 
-let data = {};
-axios
-  .get(summaryUri)
-  .then((response) => {
-    data = response.data;
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-app.get('/', (req, res) => res.send(data));
+// let data = {};
+// axios
+//   .get(summaryUri)
+//   .then((response) => {
+//     data = response.data;
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+// app.get('/', (req, res) => res.send(data));
 app.post('/login', (req, res) => res.send());
 app.listen(port, () => {
   console.log('Server is running on port: ', port);
