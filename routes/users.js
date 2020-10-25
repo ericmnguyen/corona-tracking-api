@@ -17,15 +17,18 @@ router.route('/').post((req, res) => {
   userModel
     .findOne({ email, password })
     .then((user) => {
-      jwt.sign(
-        { user: req.body },
-        'secretkey',
-        { expiresIn: '30m' },
-        (err, token) => {
-          res.json({ user, token });
-        }
-      );
-      // return res.json(email);
+      if (user) {
+        jwt.sign(
+          { user: req.body },
+          'secretkey',
+          { expiresIn: '30m' },
+          (err, token) => {
+            res.json({ user, token });
+          }
+        );
+      } else {
+        res.send('null');
+      }
     })
     .catch((err) => res.status(400).json('Error: ' + err));
 });
